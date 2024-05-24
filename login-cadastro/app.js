@@ -10,7 +10,7 @@ const db = mysql.createConnection({
     host:'localhost',
     user :'Gabriel',
     password :'SENAI123',
-    database : 'Usuarios'
+    database : 'Clientes'
 })
 
 db.connect((error)=>{
@@ -65,6 +65,21 @@ app.post ("/login", (req, res)=>{
 app.get("/cadastro", (req, res)=>{
     res.sendFile(__dirname + '/cadastro.html')
 })
+
+app.post("/registro", (req, res) => {
+    const user = req.body.username;
+    const password = req.body.password;
+    
+     db.query('insert into User (username, password) values (?, ?)', [user, password], (error, results) => {
+                if (error) {
+                    console.error("Erro ao inserir usuário no banco de dados:", error);
+                } else {
+                    console.log('Usuário cadastrado com sucesso!');
+                    res.sendFile(__dirname + '/index.html');
+                }
+            });
+        }
+    );
 app.listen(port, ()=>{
     console.log(`Servidor rodando no endereço: http://localhost:${port}`)
 })
