@@ -69,17 +69,21 @@ app.get("/cadastro", (req, res)=>{
 app.post("/registro", (req, res) => {
     const user = req.body.username;
     const password = req.body.password;
-    
-     db.query('insert into User (username, password) values (?, ?)', [user, password], (error, results) => {
-                if (error) {
-                    console.error("Erro ao inserir usuário no banco de dados:", error);
-                } else {
-                    console.log('Usuário cadastrado com sucesso!');
-                    res.sendFile(__dirname + '/index.html');
+    const confirma = req.body.confirma;
+
+    if (password === confirma){
+        db.query('insert into user (username, password) values (?,?);', [user, password], (error, results)=>{ 
+            if (error){
+                console.log('Erro ao inserir usuário', error);
+            }else {
+                console.log('novo usuario autenticado');
+                res.sendFile(__dirname+ '/index.html')
                 }
             });
+        }else{
+            console.log('Senhas Divergentes')
         }
-    );
+        });
 app.listen(port, ()=>{
     console.log(`Servidor rodando no endereço: http://localhost:${port}`)
 })
